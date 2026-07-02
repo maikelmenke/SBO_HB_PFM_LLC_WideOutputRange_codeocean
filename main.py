@@ -32,14 +32,14 @@ else:
     if not os.path.isdir(os.path.join(CODE, 'llc_sim')):
         print("postInstall has not run yet — downloading source from GitHub...")
         zip_url = ('https://github.com/maikelmenke/'
-                   'SBO_HB_PFM_LLC_WideOutputRange/archive/refs/heads/codeocean.zip')
+                   'SBO_HB_PFM_LLC_WideOutputRange_codeocean/archive/refs/heads/main.zip')
         zip_path = '/tmp/llc_src.zip'
         req = urllib.request.Request(zip_url, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req) as resp, open(zip_path, 'wb') as out:
             out.write(resp.read())
         with zipfile.ZipFile(zip_path, 'r') as z:
             z.extractall('/tmp/')
-        os.rename('/tmp/SBO_HB_PFM_LLC_WideOutputRange-codeocean', CODE)
+        os.rename('/tmp/SBO_HB_PFM_LLC_WideOutputRange_codeocean-main', CODE)
         print("Installing Python dependencies...")
         _pip = [sys.executable, '-m', 'pip', 'install', '-q', '--break-system-packages']
         subprocess.run(_pip + ['-r', os.path.join(CODE, 'requirements.txt')], check=True)
