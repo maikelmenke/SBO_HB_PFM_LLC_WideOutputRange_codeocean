@@ -1,5 +1,20 @@
 # LLC Resonant Converter — Analysis & Design Framework
 
+> **Note:** This repository exists solely to provide a Code Ocean-compatible version of the code.
+> The actively maintained repository is at:
+> **https://github.com/maikelmenke/SBO_HB_PFM_LLC_WideOutputRange**
+
+---
+
+## Associated Publication
+
+This code is associated with the article:
+
+> **Simulation-Based Optimization for LLC Resonant Converter Design Over a Wide Operating Range**
+> Maikel Fernando Menke, *Member, IEEE*, Eduardo Bayona Blanco, Pedro Pappis, Joshua R. Neusser, *Member, IEEE*, Guirguis Abdelmessih, *Senior Member, IEEE*, Marco Antonio Dalla Costa, *Senior Member, IEEE*, Jose Marcos Alonso, *Fellow, IEEE*
+
+---
+
 A Python-based framework for simulation and design of LLC resonant converters (Half-Bridge, Full-Wave Rectifier) using PySpice/ngspice.
 
 📄 **[Documentation (PDF)](Documentation__LLC_Resonant_Converter_Simulation_Based_Analysis_Framework.pdf)** — full methodology, circuit model, steady-state detection algorithm, and optimisation formulation.
