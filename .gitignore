@@ -28,8 +28,12 @@ ENV/
 *.ipynb
 
 # ------ Generated outputs (simulation results, plots, reports) ------
+# Both directory and symlink forms (symlinks don't match trailing-slash patterns)
+outputs
 outputs/
+opt/outputs
 opt/outputs/
+results/
 *.csv
 *.pdf
 *.png
