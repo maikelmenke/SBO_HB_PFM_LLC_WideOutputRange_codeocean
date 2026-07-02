@@ -23,14 +23,17 @@ RUN_PLOT_GA      = False   # Plot GA results (reads CSVs from /results/ga/)
 
 os.environ.setdefault('MPLBACKEND', 'Agg')
 
-# Prefer /opt/llc (pre-installed by postInstall); fall back to /tmp/llc if the
-# environment was not rebuilt yet after postInstall was updated.
-if os.path.isdir('/opt/llc/llc_sim'):
+# Priority: 1) /code (Code Ocean native — GitHub files mounted here)
+#           2) /opt/llc (pre-installed by postInstall)
+#           3) /tmp/llc (last-resort download fallback)
+if os.path.isdir('/code/llc_sim'):
+    CODE = '/code'
+elif os.path.isdir('/opt/llc/llc_sim'):
     CODE = '/opt/llc'
 else:
     CODE = '/tmp/llc'
     if not os.path.isdir(os.path.join(CODE, 'llc_sim')):
-        print("postInstall has not run yet — downloading source from GitHub...")
+        print("Downloading source from GitHub...")
         zip_url = ('https://github.com/maikelmenke/'
                    'SBO_HB_PFM_LLC_WideOutputRange_codeocean/archive/refs/heads/main.zip')
         zip_path = '/tmp/llc_src.zip'
@@ -46,21 +49,21 @@ else:
         subprocess.run(_pip + [CODE], check=True)
         subprocess.run(['pyspice-post-installation', '--install-ngspice-dll'], check=True)
 
-    # Install libngspice0 v36 if not already present
-    _so0 = '/usr/lib/x86_64-linux-gnu/libngspice.so.0'
-    if not os.path.exists(_so0):
-        print("Installing libngspice0 v36...")
-        subprocess.run(['apt-get', 'update', '-qq'], check=True)
-        deb_url = ('http://archive.ubuntu.com/ubuntu/pool/universe/n/ngspice/'
-                   'libngspice0_36+ds-1_amd64.deb')
-        deb_path = '/tmp/libngspice0_v36.deb'
-        req_deb = urllib.request.Request(deb_url, headers={'User-Agent': 'Mozilla/5.0'})
-        with urllib.request.urlopen(req_deb) as resp, open(deb_path, 'wb') as out:
-            out.write(resp.read())
-        subprocess.run(['apt-get', 'install', '-y', '--allow-downgrades', deb_path], check=True)
-    _so = '/usr/lib/x86_64-linux-gnu/libngspice.so'
-    if os.path.exists(_so0) and not os.path.exists(_so):
-        os.symlink(_so0, _so)
+# Install libngspice0 v36 if not already present (postInstall handles this normally)
+_so0 = '/usr/lib/x86_64-linux-gnu/libngspice.so.0'
+if not os.path.exists(_so0):
+    print("Installing libngspice0 v36...")
+    subprocess.run(['apt-get', 'update', '-qq'], check=True)
+    deb_url = ('http://archive.ubuntu.com/ubuntu/pool/universe/n/ngspice/'
+               'libngspice0_36+ds-1_amd64.deb')
+    deb_path = '/tmp/libngspice0_v36.deb'
+    req_deb = urllib.request.Request(deb_url, headers={'User-Agent': 'Mozilla/5.0'})
+    with urllib.request.urlopen(req_deb) as resp, open(deb_path, 'wb') as out:
+        out.write(resp.read())
+    subprocess.run(['apt-get', 'install', '-y', '--allow-downgrades', deb_path], check=True)
+_so = '/usr/lib/x86_64-linux-gnu/libngspice.so'
+if os.path.exists(_so0) and not os.path.exists(_so):
+    os.symlink(_so0, _so)
 
 print(f"Using source from: {CODE}")
 
